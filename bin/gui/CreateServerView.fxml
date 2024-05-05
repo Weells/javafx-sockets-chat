@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="191.0" prefWidth="253.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateServerViewController">
+   <children>
+      <Pane prefHeight="191.0" prefWidth="253.0">
+         <children>
+            <TextField fx:id="txtServerIp" editable="false" layoutX="26.0" layoutY="47.0" prefHeight="25.0" prefWidth="119.0" text="127.0.0.1" />
+            <TextField fx:id="txtServerPort" layoutX="152.0" layoutY="47.0" prefHeight="25.0" prefWidth="71.0" />
+            <Button fx:id="btnCreateServer" layoutX="26.0" layoutY="85.0" mnemonicParsing="false" onAction="#createConnection" prefHeight="25.0" prefWidth="198.0" text="Criar Servidor" />
+            <Label layoutX="26.0" layoutY="21.0" text="IP Servidor" />
+            <Label layoutX="152.0" layoutY="21.0" text="Porta" />
+            <Button fx:id="btnLoginDialog" layoutX="166.0" layoutY="148.0" mnemonicParsing="false" onAction="#onBtnLoginDialog" prefHeight="25.0" prefWidth="57.0" text="Voltar" />
+            <Label fx:id="labelError" layoutX="26.0" layoutY="121.0" prefHeight="17.0" prefWidth="198.0" textAlignment="CENTER" textFill="RED" wrapText="true" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

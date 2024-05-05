@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="307.0" prefWidth="266.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginViewController">
+   <children>
+      <Pane layoutY="-5.0" prefHeight="330.0" prefWidth="266.0">
+         <children>
+            <TextField fx:id="txtUsername" layoutX="37.0" layoutY="52.0" prefHeight="25.0" prefWidth="190.0" />
+            <TextField fx:id="txtServerIp" layoutX="37.0" layoutY="113.0" prefHeight="25.0" prefWidth="105.0" text="127.0.0.1" />
+            <TextField fx:id="txtServerPort" layoutX="152.0" layoutY="113.0" prefHeight="25.0" prefWidth="74.0" />
+            <Button fx:id="btnConnect" layoutX="37.0" layoutY="154.0" mnemonicParsing="false" onAction="#onConnectionButtonAction" prefHeight="25.0" prefWidth="190.0" text="Conectar" />
+            <Label layoutX="37.0" layoutY="87.0" text="IP Servidor" />
+            <Label layoutX="152.0" layoutY="87.0" text="Porta" />
+            <Label layoutX="37.0" layoutY="29.0" text="Usuário" />
+            <Button fx:id="btnCreateConnection" layoutX="37.0" layoutY="271.0" mnemonicParsing="false" onAction="#onCreateConnectionAction" prefHeight="25.0" prefWidth="190.0" text="Criar conexão" />
+            <Label layoutX="66.0" layoutY="239.0" text="Deseja criar um servidor?" />
+            <Separator layoutX="37.0" layoutY="214.0" prefWidth="200.0" />
+            <Label fx:id="labelError" layoutX="38.0" layoutY="188.0" prefHeight="17.0" prefWidth="190.0" textAlignment="CENTER" textFill="RED" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
