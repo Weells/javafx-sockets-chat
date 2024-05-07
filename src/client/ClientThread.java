@@ -17,8 +17,8 @@ public class ClientThread extends Thread {
 	private TextArea textArea;
 	private String sender;
 	private ChoiceBox<String> cbOnlineUsers;
-	boolean exit = false;
 	String messageStatus = "";
+	boolean exit = false;
 	
 	public ClientThread(Socket socket, TextArea textArea, String sender, ChoiceBox<String> cbOnlineUsers) {
 		this.socket = socket;
@@ -56,7 +56,7 @@ public class ClientThread extends Thread {
 				}
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			
+			e.printStackTrace();
 		}
 	}
 	
@@ -101,17 +101,13 @@ public class ClientThread extends Thread {
 
     public void updateUsers(Message message) {
         List<String> onlineUsers = message.getOnlineUsers();
-
-        Platform.runLater(() -> {
-        	for(Object user : cbOnlineUsers.getItems().toArray()) {
-        		if(!onlineUsers.contains(user) && !user.equals("[Todos]")) 
-        			cbOnlineUsers.getItems().remove((String) user);
-        	}
-        	for(String user : onlineUsers) {
-        		if(!cbOnlineUsers.getItems().contains(user) && !user.equals(this.sender))
-        			cbOnlineUsers.getItems().add(user);
-        	}
-        });
-
+        
+		Platform.runLater(() -> {
+			onlineUsers.stream().filter(user -> user.equals(sender)).findFirst().map(onlineUsers::remove);
+			cbOnlineUsers.getItems().clear();
+			cbOnlineUsers.getItems().add("[Todos]");
+			cbOnlineUsers.setValue("[Todos]");
+			cbOnlineUsers.getItems().addAll(onlineUsers);
+		});
     }
 }

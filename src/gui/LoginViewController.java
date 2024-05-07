@@ -2,9 +2,11 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import gui.util.Constraints;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,6 +55,8 @@ public class LoginViewController implements Initializable {
 
 		} else {
 			String user = txtUsername.getText();
+			String id = createId().toString();
+			String userId = String.format("%s <%s>", user, id);
 			String server = txtServerIp.getText();
 			Integer ip = Integer.valueOf(txtServerPort.getText());
 
@@ -60,31 +64,31 @@ public class LoginViewController implements Initializable {
 			Parent window = (AnchorPane) loader.load();
 			chatController = loader.<ChatViewController>getController();
 
-			ConnectionResponse response = chatController.ConnectUser(user, server, ip);
-			switch (response) {
-			case CONNECTED:
-				chatController.getUser().setText(user);
+			ConnectionResponse response = chatController.ConnectUser(userId, server, ip);
+			Platform.runLater(() -> {
+				switch (response) {
+				case CONNECTED:
+					chatController.getUser().setText(user);
+					chatController.getUserId().setText("ID: " + id + "");
 
-				Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-				Scene scene = new Scene(window);
-				stage.hide();
-				stage.setScene(scene);
-				stage.setTitle(server + ":" + ip);
-				stage.setOnHiding(e -> {
-					chatController.onExit();
-				});
-				stage.show();
-				break;
-			case USERNAME_IN_USE:
-				labelError.setText("Nome de usuário em uso");
-				break;
-			case ERROR:
-				labelError.setText("Erro ao conectar, tente novamente");
-				break;
-			default:
-				break;
+					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					Scene scene = new Scene(window);
+					stage.hide();
+					stage.setScene(scene);
+					stage.setTitle(server + ":" + ip);
+					stage.setOnHiding(e -> {
+						chatController.onExit();
+					});
+					stage.show();
+					break;
+				case ERROR:
+					labelError.setText("Erro ao conectar, tente novamente");
+					break;
+				default:
+					break;
 
-			}
+				}
+			});
 
 		}
 	}
@@ -98,4 +102,8 @@ public class LoginViewController implements Initializable {
 		stage.show();
 	}
 
+	public Integer createId() {
+		Random rand = new Random();
+		return rand.nextInt(1000, 2000);
+	}
 }

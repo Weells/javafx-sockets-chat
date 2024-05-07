@@ -14,7 +14,7 @@
       <Pane prefHeight="493.0" prefWidth="300.0">
          <children>
             <TextField fx:id="txtMessageField" layoutX="73.0" layoutY="405.0" onKeyPressed="#sendMessageOnEnter" prefHeight="31.0" prefWidth="223.0" />
-            <Label fx:id="labelChat" layoutX="20.0" layoutY="20.0" prefHeight="27.0" prefWidth="154.0" text="Usuário">
+            <Label fx:id="labelUser" layoutX="20.0" layoutY="7.0" prefHeight="27.0" prefWidth="154.0" text="Usuário">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -30,6 +30,11 @@
             <Label layoutX="200.0" layoutY="11.0" text="Visibilidade">
                <font>
                   <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelUserId" layoutX="20.0" layoutY="36.0" prefHeight="17.0" prefWidth="135.0">
+               <font>
+                  <Font name="System Italic" size="14.0" />
                </font>
             </Label>
          </children>

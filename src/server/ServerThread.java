@@ -6,17 +6,18 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import domain.Message;
 import domain.Message.Action;
+import domain.User;
 
 public class ServerThread extends Thread {
 	
-	private static Map<String, Socket> clientsMap = new HashMap<>();
+	private static List<User> clientsList = new ArrayList<>();
 	private Socket socket;
 	
 	public ServerThread(Socket s) {
@@ -60,45 +61,50 @@ public class ServerThread extends Thread {
 	}
 	
 	public void connect(Message message) {
-		clientsMap.put(message.getSender(), socket);
+		clientsList.add(new User(message.getSender(), socket));
 	}
 	
 	public void disconnect(Message message) {
-		clientsMap.remove(message.getSender());
+		clientsList.stream()
+		.filter(user -> user.username().equals(message.getSender()))
+		.findFirst()
+		.ifPresent(clientsList::remove);
 	}
 	
 	public void sendMessageToAll(Message message) throws IOException {
-		for(Map.Entry<String, Socket> client : clientsMap.entrySet()) {
-			ObjectOutputStream output = new ObjectOutputStream(client.getValue().getOutputStream());
+		for(User client : clientsList) {
+			ObjectOutputStream output = new ObjectOutputStream(client.socket().getOutputStream());
 			output.writeObject(message);
 		}
 	}
 	
 	public void sendMessageToOne(Message message) throws IOException {
-		for(Map.Entry<String, Socket> client : clientsMap.entrySet()) {
-			if(message.getRecipient().equals(client.getKey())) {
-				ObjectOutputStream recipientOutput = new ObjectOutputStream(client.getValue().getOutputStream());
+		for(User client : clientsList) {
+			if(message.getRecipient().equals(client.username())) {
+				ObjectOutputStream recipientOutput = new ObjectOutputStream(client.socket().getOutputStream());
 				recipientOutput.writeObject(message);
 			}
 		}
 		if(!message.getSender().equals(message.getRecipient())) {
-			ObjectOutputStream senderOutput = new ObjectOutputStream(clientsMap.get(message.getSender()).getOutputStream());
+			Optional<User> client = clientsList.stream().filter(user -> user.username().equals(message.getSender())).findFirst();
+			Integer index = clientsList.lastIndexOf(client.get());
+			ObjectOutputStream senderOutput = new ObjectOutputStream(clientsList.get(index).socket().getOutputStream());
 			senderOutput.writeObject(message);
 		}
 	}
 	
 	public void sendOnlineUsers() throws IOException {
 		ArrayList<String> onlineUsers = new ArrayList<>();
-		for(Map.Entry<String, Socket> client : clientsMap.entrySet()) {
-			onlineUsers.add(client.getKey());
+		for(User client : clientsList) {
+			onlineUsers.add(client.username());
 		}
 		
 		Message message = new Message();
 		message.setAction(Action.USERS_ONLINE);
 		message.setOnlineUsers(onlineUsers);
 		
-		for(Map.Entry<String, Socket> client : clientsMap.entrySet()) {
-			ObjectOutputStream output = new ObjectOutputStream(client.getValue().getOutputStream());
+		for(User client : clientsList) {
+			ObjectOutputStream output = new ObjectOutputStream(client.socket().getOutputStream());
 			output.writeObject(message);
 		}
 	}

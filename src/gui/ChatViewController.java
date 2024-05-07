@@ -33,7 +33,10 @@ public class ChatViewController implements Initializable {
 	private Button btnSendMessage;
 
 	@FXML
-	private Label labelChat;
+	private Label labelUser;
+	
+	@FXML
+	private Label labelUserId;
 
 	@FXML
 	private ChoiceBox<String> cbOnlineUsers;
@@ -62,9 +65,7 @@ public class ChatViewController implements Initializable {
 		try {
 			socket = new Socket(server, ip);
 			ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-
-			// Enviando a primeira mensagem informando conexão (apenas para passar o nome do
-			// cliente)
+			
 			Message message = new Message();
 			message.setSender(sender);
 			message.setText("entrou no chat!");
@@ -74,16 +75,9 @@ public class ChatViewController implements Initializable {
 			client.setName("Thread Cliente " + sender);
 			client.start();
 			output.writeObject(message);
-
-			if (this.cbOnlineUsers.getItems().contains(sender)) {
-				throw new IllegalStateException();
-			}
-
+		
 		} catch (IOException e) {
 			return ConnectionResponse.ERROR;
-		} catch (IllegalStateException e) {
-			socket.close();
-			return ConnectionResponse.USERNAME_IN_USE;
 		}
 		return ConnectionResponse.CONNECTED;
 	}
@@ -142,11 +136,11 @@ public class ChatViewController implements Initializable {
 	}
 
 	public Label getUser() {
-		return this.labelChat;
+		return this.labelUser;
 	}
-
-	public ChoiceBox<String> getCbOnlineUsers() {
-		return this.cbOnlineUsers;
+	
+	public Label getUserId() {
+		return this.labelUserId;
 	}
 
 }
