@@ -1,5 +1,8 @@
 package domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +15,7 @@ public class Message implements Serializable {
 	private String sender;
 	private String recipient;
 	private String text;
+	private byte[] file;
 	private String timeStamp;
 	private Action action;
 	private List<String> onlineUsers = new ArrayList<>();
@@ -38,6 +42,14 @@ public class Message implements Serializable {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	public byte[] getFile() {
+		return this.file;
+	}
+	
+	public void setFile(File file) throws IOException {
+		this.file = getRawBytesFromFile(file.getAbsolutePath());
 	}
 	
 	public String getTimeStamp() {
@@ -67,5 +79,16 @@ public class Message implements Serializable {
 
 	public enum Action {
 		CONNECT, DISCONNECT, SEND, SEND_ONE, USERS_ONLINE
+	}
+	
+	private static byte[] getRawBytesFromFile(String path) throws IOException {
+		byte[] image;
+		File file = new File(path);
+		image = new byte[(int)file.length()];
+		
+		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+			fileInputStream.read(image);
+		}
+		return image;
 	}
 }
