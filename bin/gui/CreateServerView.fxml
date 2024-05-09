@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="191.0" prefWidth="253.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateServerViewController">
    <children>
@@ -17,6 +18,26 @@
             <Label layoutX="152.0" layoutY="21.0" text="Porta" />
             <Button fx:id="btnLoginDialog" layoutX="166.0" layoutY="148.0" mnemonicParsing="false" onAction="#onBtnLoginDialog" prefHeight="25.0" prefWidth="57.0" text="Voltar" />
             <Label fx:id="labelError" layoutX="26.0" layoutY="121.0" prefHeight="17.0" prefWidth="198.0" textAlignment="CENTER" textFill="RED" wrapText="true" />
+            <Label fx:id="labelWarn1" layoutX="36.0" layoutY="61.0" prefHeight="17.0" prefWidth="175.0" text="Conexão local criada" textFill="#022b6b" visible="false">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelWarn2" layoutX="22.0" layoutY="92.0" prefHeight="17.0" prefWidth="204.0" text="Aguardando comunicação na porta " textFill="#022b6b" visible="false">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelWarn3" layoutX="71.0" layoutY="116.0" prefHeight="17.0" prefWidth="57.0" text="localhost:" textFill="#022b6b" visible="false">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelWarn4" layoutX="134.0" layoutY="115.0" prefHeight="17.0" prefWidth="71.0" textFill="#690202" visible="false">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>

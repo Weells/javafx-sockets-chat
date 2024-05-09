@@ -5,52 +5,51 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ChatViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ChatViewController">
    <children>
-      <Pane prefHeight="493.0" prefWidth="340.0">
+      <Pane prefHeight="555.0" prefWidth="440.0">
          <children>
-            <TextField fx:id="txtMessageField" layoutX="75.0" layoutY="405.0" onKeyPressed="#sendMessageOnEnter" prefHeight="31.0" prefWidth="260.0" />
-            <Button fx:id="btnFileUpload" layoutX="5.0" layoutY="405.0" mnemonicParsing="false" onAction="#uploadFile" prefHeight="31.0" prefWidth="65.0" text="Mídia" />
-            <Label fx:id="labelUser" layoutX="20.0" layoutY="7.0" prefHeight="27.0" prefWidth="154.0" text="Usuário">
+            <TextField fx:id="txtMessageField" layoutX="77.0" layoutY="464.0" onKeyPressed="#sendMessageOnEnter" prefHeight="31.0" prefWidth="298.0" />
+            <Button fx:id="btnFileUpload" layoutX="6.0" layoutY="464.0" mnemonicParsing="false" onAction="#uploadFile" prefHeight="31.0" prefWidth="65.0" text="Mídia" />
+            <Label fx:id="labelUser" layoutX="30.0" layoutY="9.0" prefHeight="27.0" prefWidth="154.0" text="Usuário">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="btnSendMessage" layoutX="280.0" layoutY="448.0" mnemonicParsing="false" onAction="#onSendMessage" prefHeight="31.0" prefWidth="54.0" text="Enviar" textOverrun="CLIP" wrapText="true" />
-            <Label fx:id="labelFileName" layoutX="14.0" layoutY="416.0" />
-            <ChoiceBox fx:id="cbOnlineUsers" layoutX="216.0" layoutY="33.0" prefHeight="25.0" prefWidth="105.0" />
-            <Label layoutX="233.0" layoutY="11.0" text="Visibilidade">
+            <Button fx:id="btnSendMessage" layoutX="381.0" layoutY="464.0" mnemonicParsing="false" onAction="#onSendMessage" prefHeight="31.0" prefWidth="54.0" text="Enviar" textOverrun="CLIP" wrapText="true" />
+            <Label fx:id="labelFileName" layoutX="30.0" layoutY="510.0" maxWidth="230.0" textFill="#000751" />
+            <ChoiceBox fx:id="cbOnlineUsers" layoutX="322.0" layoutY="33.0" prefHeight="25.0" prefWidth="105.0" />
+            <Label layoutX="339.0" layoutY="11.0" text="Visibilidade">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Label fx:id="labelUserId" layoutX="20.0" layoutY="36.0" prefHeight="17.0" prefWidth="135.0">
+            <Label fx:id="labelUserId" layoutX="30.0" layoutY="38.0" prefHeight="17.0" prefWidth="135.0">
                <font>
                   <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <ScrollPane hbarPolicy="NEVER" layoutY="69.0" prefHeight="330.0" prefWidth="340.0">
+            <ScrollPane hbarPolicy="NEVER" layoutY="69.0" prefHeight="387.0" prefWidth="440.0">
                <content>
-                  <VBox fx:id="txtArea" fillWidth="false" nodeOrientation="LEFT_TO_RIGHT" prefWidth="335.0" spacing="5.0">
+                  <VBox fx:id="txtArea" fillWidth="false" nodeOrientation="LEFT_TO_RIGHT" prefWidth="435.0" spacing="5.0">
                      <padding>
                         <Insets left="10.0" top="10.0" />
                      </padding>
                   </VBox>
                </content>
             </ScrollPane>
+            <Label fx:id="labelDeleteFile" layoutX="10.0" layoutY="510.0" onMouseClicked="#deleteFile" text="X" textFill="RED" visible="false">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
-      <TextArea editable="false" layoutX="350.0" layoutY="162.0" prefHeight="82.0" prefWidth="198.0" wrapText="true">
-         <font>
-            <Font name="Calibri" size="14.0" />
-         </font>
-      </TextArea>
    </children>
 </AnchorPane>
