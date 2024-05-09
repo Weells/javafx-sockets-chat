@@ -103,7 +103,7 @@ public class ClientThread extends Thread {
 			this.textArea.getChildren().add(createMessageNode(messageText));
 			messageStatus = "";
 			if (message.getUserFile() != null) {
-				createImageNode(message.getUserFile());
+				createImageNode(message.getUserFile(), message.getSender());
 			}
 		});
 	}
@@ -133,7 +133,7 @@ public class ClientThread extends Thread {
 		return msg;
 	}
 
-	public void createImageNode(UserFile userFile){
+	public void createImageNode(UserFile userFile, String messageSender){
 		Platform.runLater(() -> {
 			int width = 0;
 			int height = 0;
@@ -174,7 +174,7 @@ public class ClientThread extends Thread {
 					
 					stage.setScene(scene);
 					stage.setResizable(false);
-					stage.setTitle("Imagem enviada por " + sender);
+					stage.setTitle("Imagem enviada por " + messageSender);
 					stage.show();
 				}
 			});

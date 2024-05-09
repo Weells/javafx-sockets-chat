@@ -62,10 +62,6 @@ public class ChatViewController implements Initializable {
 	private String sender;
 	private UserFile userFile;
 	private JFileChooser fileChooser;
-
-	public ChatViewController(Stage stage) {
-		
-	}
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
