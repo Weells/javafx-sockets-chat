@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+//Objeto que transmite os dados de comunicação entre os usuários de um servidor
 public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

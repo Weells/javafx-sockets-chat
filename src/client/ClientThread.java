@@ -24,18 +24,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+//Objeto que representa um usuário, que interage com
+//a interface do chat e mantém a conexão com o servidor
 public class ClientThread extends Thread {
 
 	private Socket socket;
-	private VBox textArea;
+	private VBox vBoxArea;
 	private String sender;
 	private ChoiceBox<String> cbOnlineUsers;
 	String messageStatus = "";
 	boolean exit = false;
 
-	public ClientThread(Socket socket, VBox textArea, String sender, ChoiceBox<String> cbOnlineUsers) {
+	public ClientThread(Socket socket, VBox vBoxArea, String sender, ChoiceBox<String> cbOnlineUsers) {
 		this.socket = socket;
-		this.textArea = textArea;
+		this.vBoxArea = vBoxArea;
 		this.sender = sender;
 		this.cbOnlineUsers = cbOnlineUsers;
 	}
@@ -44,6 +46,7 @@ public class ClientThread extends Thread {
 	public void run() {
 		try {
 			while (!exit) {
+				//Recebe um objeto Message do servidor e realiza uma ação de acordo com a finalidade da mensagem
 				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 				Message message = (Message) input.readObject();
 				Action action = message.getAction();
@@ -73,13 +76,17 @@ public class ClientThread extends Thread {
 		}
 	}
 
+	//Exibe uma mensagem de conexão com a hora e nome do usuário
 	public void connect(Message message) {
 		String messageText = message.getTimeStamp() + " " + message.getSender() + messageStatus + " "
 				+ message.getText() + "\n";
-		Platform.runLater(() -> this.textArea.getChildren().add(createMessageNode(messageText)));
+		Platform.runLater(() -> this.vBoxArea.getChildren().add(createMessageNode(messageText)));
 	}
 
+	//Exibe uma mensagem de desconexão com a hora e nome do usuário
 	public void disconnect(Message message) throws IOException {
+		//Se o usuário que desconectar estiver recebendo mensagens privadas
+		//a visibilidade das mensagens do outro usuário passará a ser pública
 		if (cbOnlineUsers.getValue().equals(message.getSender()))
 			Platform.runLater(() -> {
 				cbOnlineUsers.setValue("[Todos]");
@@ -87,27 +94,33 @@ public class ClientThread extends Thread {
 
 		String messageText = message.getTimeStamp() + " " + message.getSender() + messageStatus + " "
 				+ message.getText() + "\n";
-		Platform.runLater(() -> this.textArea.getChildren().add(createMessageNode(messageText)));
+		Platform.runLater(() -> this.vBoxArea.getChildren().add(createMessageNode(messageText)));
 		if (message.getSender().equals(this.sender)) {
 			this.socket.close();
 			this.exit = true;
 		}
 	}
 
+	//Trata o recebimento de mensagens
 	public void receiveMessage(Message message) throws IOException {
+		//Se for uma mensagem privada, haverá uma especificação
 		if (message.getAction() == Message.Action.SEND_ONE)
 			messageStatus = String.format(" (mensagem para %s)", message.getRecipient());
 		String messageText = message.getTimeStamp() + " " + message.getSender() + messageStatus + ": "
 				+ message.getText() + "\n";
+		
+		//Adiciona um nó filho com a mensagem ao container do chat
 		Platform.runLater(() -> {
-			this.textArea.getChildren().add(createMessageNode(messageText));
+			this.vBoxArea.getChildren().add(createMessageNode(messageText));
 			messageStatus = "";
+			//Caso a mensagem contenha algum arquivo de imagem, ela será exibida
 			if (message.getUserFile() != null) {
 				createImageNode(message.getUserFile(), message.getSender());
 			}
 		});
 	}
 
+	//Atualiza a lista de usuários online
 	public void updateUsers(Message message) {
 		List<String> onlineUsers = message.getOnlineUsers();
 
@@ -120,6 +133,7 @@ public class ClientThread extends Thread {
 		});
 	}
 
+	//Cria um nó filho que exibe a mensagem para que ele seja adicionado ao container do chat
 	public Button createMessageNode(String text) {
 		Button msg = new Button();
 		msg.setText(text);
@@ -133,6 +147,7 @@ public class ClientThread extends Thread {
 		return msg;
 	}
 
+	//Cria um nó filho para exibir uma imagem
 	public void createImageNode(UserFile userFile, String messageSender){
 		Platform.runLater(() -> {
 			int width = 0;
@@ -141,6 +156,7 @@ public class ClientThread extends Thread {
 			ImageView imgView = new ImageView();
 			String fileName = userFile.getName();
 
+			//Reproduz um arquivo de imagem com os bytes enviados pelo objeto UserFile
 			File output = new File(System.getProperty("user.dir") +"/cache/images/"+ fileName);
 			FileOutputStream fos = new FileOutputStream(output.getAbsolutePath(), false);
 			fos.write(userFile.getBytes());
@@ -158,6 +174,9 @@ public class ClientThread extends Thread {
 			imgView.setImage(image);
 			imgView.setFitWidth(width);
 			imgView.setFitHeight(height);
+			
+			//Caso o usuário clique na imagem dentro do chat
+			//ela será exibida em uma janela separada
 			imgView.setOnMouseClicked(new EventHandler<Event>() {
 				@Override
 				public void handle(Event arg0) {
@@ -179,7 +198,8 @@ public class ClientThread extends Thread {
 				}
 			});
 			
-			textArea.getChildren().add(imgView);
+			//Adiciona a imagem ao chat
+			vBoxArea.getChildren().add(imgView);
 			} catch(IOException e) {
 				e.printStackTrace();
 			}

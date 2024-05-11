@@ -21,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import server.Server.ConnectionResponse;
 
+//Controller da interface responsável pela criação ou login em uma rede
 public class LoginViewController implements Initializable {
 
 	@FXML
@@ -49,6 +50,7 @@ public class LoginViewController implements Initializable {
 		Constraints.setTextFieldInteger(txtServerPort);
 	}
 
+	//Método para conexão com um servidor de ip e porta especificados
 	public void onConnectionButtonAction(ActionEvent event) throws IOException {
 		if (txtUsername.getText().isEmpty() || txtServerIp.getText().isEmpty() || txtServerPort.getText().isEmpty()) {
 			labelError.setText("Preencha todos os campos");
@@ -64,6 +66,7 @@ public class LoginViewController implements Initializable {
 			Parent window = (AnchorPane) loader.load();
 			chatController = loader.<ChatViewController>getController();
 
+			//Cria uma instância do chat ou retorna um erro ao tentar efetuar a conexão
 			ConnectionResponse response = chatController.ConnectUser(userId, server, ip);
 			Platform.runLater(() -> {
 				switch (response) {
@@ -93,6 +96,7 @@ public class LoginViewController implements Initializable {
 		}
 	}
 
+	//Método que abre a interface que cria uma conexão local
 	public void onCreateConnectionAction(ActionEvent event) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/gui/CreateServerView.fxml"));
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -102,6 +106,7 @@ public class LoginViewController implements Initializable {
 		stage.show();
 	}
 
+	//Cria um id para cada usuário durante o login
 	public Integer createId() {
 		Random rand = new Random();
 		return rand.nextInt(1000, 2000);

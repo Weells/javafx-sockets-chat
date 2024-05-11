@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import server.Server;
 
+//Controller da interface responsável por criar uma conexão local
 public class CreateServerViewController implements Initializable {
 
 	@FXML
@@ -36,23 +37,15 @@ public class CreateServerViewController implements Initializable {
 	@FXML
 	private Label labelError;
 
-	@FXML
-	private Label labelWarn1;
-	@FXML
-	private Label labelWarn2;
-	@FXML
-	private Label labelWarn3;
-	@FXML
-	private Label labelWarn4;
-
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		Constraints.setTextFieldInteger(txtServerPort);
 	}
 
+	//Cria uma conexão local a partir de uma porta especificada pelo usuário
 	public void createConnection() {
 		if (txtServerPort.getText().isEmpty()) {
-			labelError.setText("");
+			labelError.setText("Informe uma porta válida");
 		} else {
 			try {
 				int port = Integer.valueOf(txtServerPort.getText());
@@ -66,6 +59,7 @@ public class CreateServerViewController implements Initializable {
 		}
 	}
 
+	//Botão que retorna para a tela de login
 	public void onBtnLoginDialog(ActionEvent event) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/gui/LoginView.fxml"));
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

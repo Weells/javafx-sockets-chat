@@ -5,6 +5,7 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+//Objeto que estabelece uma conexão local
 public class Server {
 
 	private Integer clients;
@@ -22,8 +23,8 @@ public class Server {
 			}
 		}
 	}
-
+	
 	public enum ConnectionResponse {
-		CONNECTED, ADDRESS_IN_USE, USERNAME_IN_USE, ERROR
+		CONNECTED, ADDRESS_IN_USE, ERROR
 	}
 }

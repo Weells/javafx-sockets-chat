@@ -15,6 +15,7 @@ import domain.Message;
 import domain.Message.Action;
 import domain.User;
 
+//Objeto que representa o servidor e a transmissão de dados para os usuários
 public class ServerThread extends Thread {
 	
 	private static List<User> clientsList = new ArrayList<>();
@@ -24,6 +25,7 @@ public class ServerThread extends Thread {
 		this.socket = s;
 	}
 	
+	//Realiza uma ação para cada tipo de objeto mensagem recebido
 	@Override
 	public void run() {
 		boolean exit = false;
@@ -60,10 +62,12 @@ public class ServerThread extends Thread {
 		}
 	}
 	
+	//Método de conexão do usuário com o chat
 	public void connect(Message message) {
 		clientsList.add(new User(message.getSender(), socket));
 	}
 	
+	//Método de desconexão
 	public void disconnect(Message message) {
 		clientsList.stream()
 		.filter(user -> user.username().equals(message.getSender()))
@@ -71,6 +75,7 @@ public class ServerThread extends Thread {
 		.ifPresent(clientsList::remove);
 	}
 	
+	//Método para envio de dados de uma mensagem pública
 	public void sendMessageToAll(Message message) throws IOException {
 		for(User client : clientsList) {
 			ObjectOutputStream output = new ObjectOutputStream(client.socket().getOutputStream());
@@ -78,6 +83,7 @@ public class ServerThread extends Thread {
 		}
 	}
 	
+	//Método para envio de dados de uma mensagem privada
 	public void sendMessageToOne(Message message) throws IOException {
 		for(User client : clientsList) {
 			if(message.getRecipient().equals(client.username())) {
@@ -93,6 +99,7 @@ public class ServerThread extends Thread {
 		}
 	}
 	
+	//Retorna os usuários online para cada instância do chat
 	public void sendOnlineUsers() throws IOException {
 		ArrayList<String> onlineUsers = new ArrayList<>();
 		for(User client : clientsList) {

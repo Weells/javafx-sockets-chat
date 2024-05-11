@@ -26,9 +26,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import server.Server.ConnectionResponse;
 
+//Controller responsável pela interação do usuário com a interface do chat
 public class ChatViewController implements Initializable {
 
 	@FXML
@@ -50,7 +50,7 @@ public class ChatViewController implements Initializable {
 	private TextField txtMessageField;
 
 	@FXML
-	private VBox txtArea;
+	private VBox vBoxArea;
 
 	@FXML
 	private Label labelFileName;
@@ -69,6 +69,7 @@ public class ChatViewController implements Initializable {
 		cbOnlineUsers.setValue("[Todos]");
 	}
 
+	//Realização da conexão do usuário com o servidor
 	public ConnectionResponse ConnectUser(String sender, String server, Integer ip) throws IOException {
 		this.sender = sender;
 
@@ -76,12 +77,14 @@ public class ChatViewController implements Initializable {
 			socket = new Socket(server, ip);
 			ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 			
+			//Envia uma mensagem de conexão para o servidor e aos usuários
 			Message message = new Message();
 			message.setSender(sender);
 			message.setText("entrou no chat!");
 			message.setAction(Message.Action.CONNECT);
 
-			ClientThread client = new ClientThread(socket, txtArea, sender, cbOnlineUsers);
+			//Cria uma instância para o usuário que irá manipular a interface e manter conexão com o servidor
+			ClientThread client = new ClientThread(socket, vBoxArea, sender, cbOnlineUsers);
 			client.setName("Thread Cliente " + sender);
 			client.start();
 			output.writeObject(message);
@@ -92,6 +95,7 @@ public class ChatViewController implements Initializable {
 		return ConnectionResponse.CONNECTED;
 	}
 
+	//Método de envio de mensagens
 	public void onSendMessage() {
 		if(!this.txtMessageField.getText().isEmpty() || userFile != null) {
 			try {
@@ -100,6 +104,7 @@ public class ChatViewController implements Initializable {
 				message.setText(this.txtMessageField.getText());
 				message.setAction(Message.Action.SEND);
 
+				//Se um usuário escolhe outro usuário na lista de visiblidade, a mensagem será privada
 				if (cbOnlineUsers.getSelectionModel().getSelectedItem() != "[Todos]") {
 					message.setAction(Message.Action.SEND_ONE);
 					message.setRecipient((String) cbOnlineUsers.getSelectionModel().getSelectedItem());
@@ -107,7 +112,7 @@ public class ChatViewController implements Initializable {
 				if (userFile != null)
 					message.setUserFile(userFile);
 
-				// Saída de Dados do Cliente
+				// Saída de dados do usuário
 				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 				output.writeObject(message);
 
@@ -122,12 +127,14 @@ public class ChatViewController implements Initializable {
 		}
 	}
 
+	//Método para envio de mensagens pressionando enter
 	public void sendMessageOnEnter(KeyEvent e) {
 		if (e.getCode() == KeyCode.ENTER) {
 			this.onSendMessage();
 		}
 	}
 
+	//Método que exibe para os usuários quando alguém se desconecta
 	public void onExit() {
 		try {
 			Message message = new Message();
@@ -142,11 +149,15 @@ public class ChatViewController implements Initializable {
 		}
 	}
 
+	//Método responsável por possibilitar a adição de imagens às mensagens
 	public void uploadFile() throws IOException {
 		fileChooser = new JFileChooser();
+		
+		//Define o recebimento somente de arquivos de imagem
 		FileFilter filter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
 		fileChooser.addChoosableFileFilter(filter);
 		fileChooser.setAcceptAllFileFilterUsed(false);
+		
 		fileChooser.setCurrentDirectory(new File("C://Users//" + System.getProperty("user.home") + "//Desktop//Documents"));
 		int response = fileChooser.showSaveDialog(null);
 		if (response == JFileChooser.APPROVE_OPTION) {
@@ -157,6 +168,7 @@ public class ChatViewController implements Initializable {
 		}
 	}
 
+	//Método que limpa o seletor de mídia
 	public void deleteFile() {
 		this.userFile = null;
 		this.labelFileName.setText("");

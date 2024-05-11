@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-
 public class Main extends Application {
 	
 	private static Scene mainScene;
@@ -16,9 +15,6 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginView.fxml"));
 			AnchorPane anchorPane = loader.load();
-			
-			//scrollPane.setFitToHeight(true);
-			//scrollPane.setFitToWidth(true);
 			
 			mainScene = new Scene(anchorPane);
 			primaryStage.setScene(mainScene);

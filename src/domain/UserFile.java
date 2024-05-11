@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import javafx.scene.image.Image;
 
+//Objeto que transmite os dados de um arquivo de mídia
 public class UserFile implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -37,6 +38,7 @@ public class UserFile implements Serializable {
 		this.bytes = bytes;
 	}
 	
+	//Extrai os bytes de um arquivo
 	private static byte[] getRawBytesFromFile(String path) throws IOException {
 		byte[] image;
 		File file = new File(path);
@@ -48,6 +50,9 @@ public class UserFile implements Serializable {
 		return image;
 	}
 	
+	public record Scale(Double width, Double height) {}
+	
+	//Redimensiona a escala de uma imagem caso necessário
 	public static Scale resizeScale(Image img) {
 		Double width = img.getWidth();
 		Double height = img.getHeight();
@@ -58,6 +63,4 @@ public class UserFile implements Serializable {
 		}
 		return new Scale(width, height);
 	}
-	
-	public record Scale(Double width, Double height) {}
 }
